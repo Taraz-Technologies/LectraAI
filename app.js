@@ -11,6 +11,7 @@ const resultEl = document.getElementById("result");
 
 let currentAccount = null;
 let currentAccessToken = null;
+let currentUserEmail = null;
 
 function setAuthStatus(message, type) {
   authStatusEl.textContent = message;
@@ -77,6 +78,7 @@ function handleResponse(response) {
 
   // Extra client-side domain check.
   const username = currentAccount.username || currentAccount.localAccountId || "";
+  currentUserEmail = username || null;
   if (!username.toLowerCase().endsWith(allowedEmailDomain)) {
     setSignedInState(false);
     setAuthStatus(
@@ -106,6 +108,16 @@ async function getToken() {
 }
 
 async function init() {
+  // REQUIRED for @azure/msal-browser v3+: initialize before any other MSAL calls.
+  try {
+    await msalInstance.initialize();
+  } catch (error) {
+    console.error("MSAL initialization failed", error);
+    setAuthStatus("Authentication library failed to initialize. Please refresh or contact IT.", "error");
+    setSignedInState(false);
+    return;
+  }
+
   // Handle redirect if used (we mainly use popup here, but this keeps things robust).
   msalInstance
     .handleRedirectPromise()
@@ -144,6 +156,7 @@ async function init() {
     resultEl.classList.add("tt-result-hidden");
 
     const videoUrl = document.getElementById("video-url").value.trim();
+    const title = document.getElementById("video-title").value.trim();
     if (!videoUrl) {
       showResult("Please provide a YouTube or Google Drive URL.", true);
       return;
@@ -176,7 +189,11 @@ async function init() {
             ? { Authorization: `Bearer ${currentAccessToken}` }
             : {}),
         },
-        body: JSON.stringify({ video_url: videoUrl }),
+        body: JSON.stringify({
+          video_url: videoUrl,
+          title,
+          user_email: currentUserEmail || "",
+        }),
       });
 
       if (!response.ok) {

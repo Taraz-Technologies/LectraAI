@@ -6,7 +6,7 @@ const msalConfig = {
   auth: {
     clientId: "8d57f49c-fcf6-4805-ae14-89013ee099f1", 
     authority: "https://login.microsoftonline.com/9f1a1bc4-e5b7-4144-99b3-1f692eae04fd",
-    redirectUri: "https://subhan72.github.io/taraz/",
+    redirectUri: "https://subhan72.github.io/taraz",
   },
   cache: {
     cacheLocation: "sessionStorage",

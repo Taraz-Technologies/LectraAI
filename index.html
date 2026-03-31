@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Taraz Technologies – Lecture Processing</title>
     <link rel="stylesheet" href="styles.css" />
-    <!-- MSAL.js v2 (browser) -->
-    <script src="https://alcdn.msauth.net/browser/2.38.4/js/msal-browser.min.js" integrity="sha384-3p9hq1dYtPAGwq/TBcNbJfJ14q9lHK20jW/Ta3cuxKQXPjCuwC3JciLdo7veVnJp" crossorigin="anonymous"></script>
+    <!-- MSAL.js v2 (browser)
+         Using jsDelivr CDN for @azure/msal-browser.
+         The previous alcdn.msauth.net URL returned 404, so msal was never defined. -->
+    <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@3.7.0/lib/msal-browser.min.js" crossorigin="anonymous"></script>
     <script defer src="msal-config.js"></script>
     <script defer src="app.js"></script>
   </head>
@@ -42,6 +44,21 @@
         </div>
 
         <form id="video-form" class="tt-form tt-form-disabled">
+          <label for="video-title" class="tt-label">
+            Lecture title
+            <span class="tt-label-sub">
+              This title will be used for naming the ZIP, HTML, DOC files, and document headings.
+            </span>
+          </label>
+          <input
+            id="video-title"
+            name="title"
+            type="text"
+            class="tt-input"
+            placeholder="e.g. Introduction to Power Electronics"
+            required
+          />
+
           <label for="video-url" class="tt-label">
             Video URL
             <span class="tt-label-sub">Paste a YouTube or Google Drive link.</span>
